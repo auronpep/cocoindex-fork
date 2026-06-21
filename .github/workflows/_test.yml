@@ -36,7 +36,7 @@ jobs:
           RUSTC_WRAPPER: "sccache"
 
         steps:
-        - uses: actions/checkout@v6
+        - uses: actions/checkout@v7
           with:
             fetch-depth: 1
 
@@ -118,7 +118,7 @@ jobs:
     validate-3p-notices:
         runs-on: ubuntu-latest
         steps:
-        - uses: actions/checkout@v6
+        - uses: actions/checkout@v7
           with:
             fetch-depth: 1
         - name: Install Rust toolchain
