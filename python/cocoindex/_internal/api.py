@@ -132,6 +132,7 @@ from .runner import GPU, Runner
 from .memo_fingerprint import (
     memo_fingerprint,
     register_memo_key_function,
+    register_not_memo_keyable,
     NotMemoKeyable,
 )
 
@@ -709,6 +710,7 @@ __all__ = [
     # .memo_fingerprint
     "memo_fingerprint",
     "register_memo_key_function",
+    "register_not_memo_keyable",
     "NotMemoKeyable",
     # .pending_marker
     "MaybePendingS",
