@@ -49,14 +49,17 @@ jobs:
           jobSummary: true
           output: ./lychee/out.md
 
-      - name: Fail on broken links
-        if: steps.lychee.outputs.exit_code == 1
-        run: exit 1
-
+      # Must run before the failing step below: a step whose `if` contains no
+      # status-check function gets an implicit `success() &&`, so anything
+      # placed after "Fail on broken links" is skipped and never runs.
       - name: Create issue from report
-        if: steps.lychee.outputs.exit_code == 1
+        if: steps.lychee.outputs.exit_code == 1 && github.event_name != 'pull_request'
         uses: peter-evans/create-issue-from-file@v6
         with:
           title: Link Checker Report
           content-filepath: ./lychee/out.md
           labels: report, automated issue
+
+      - name: Fail on broken links
+        if: steps.lychee.outputs.exit_code == 1
+        run: exit 1
