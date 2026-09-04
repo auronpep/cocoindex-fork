@@ -406,7 +406,7 @@ app = coco.App(
     app_main,
 )
 '''
-    (project_path / "main.py").write_text(main_py_content)
+    (project_path / "main.py").write_text(main_py_content, encoding="utf-8")
 
     # Create pyproject.toml
     pyproject_toml_content = f"""[project]
@@ -418,7 +418,9 @@ dependencies = [
     "cocoindex>={coco.__version__}",
 ]
 """
-    (project_path / "pyproject.toml").write_text(pyproject_toml_content)
+    (project_path / "pyproject.toml").write_text(
+        pyproject_toml_content, encoding="utf-8"
+    )
 
     # Create README.md
     readme_content = f"""# {project_name}
@@ -437,7 +439,7 @@ uv run cocoindex update main.py
 - `main.py` - Main application file with your CocoIndex app definition
 - `pyproject.toml` - Project metadata and dependencies
 """
-    (project_path / "README.md").write_text(readme_content)
+    (project_path / "README.md").write_text(readme_content, encoding="utf-8")
 
 
 async def _print_tree_streaming(
