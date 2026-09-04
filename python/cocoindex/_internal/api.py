@@ -611,9 +611,13 @@ async def stop() -> None:
     await environment.stop()
 
 
-def start_blocking() -> None:
-    """Start the default environment synchronously (and enter its lifespan, if any)."""
-    environment.start_sync()
+def start_blocking() -> environment.Environment:
+    """Start the default environment synchronously (and enter its lifespan, if any).
+
+    Returns the started environment, so sync callers can reach context values
+    via ``coco.start_blocking().get_context(KEY)``.
+    """
+    return environment.start_sync()
 
 
 def stop_blocking() -> None:
