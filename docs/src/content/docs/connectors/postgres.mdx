@@ -136,7 +136,7 @@ async def app_main(pool: asyncpg.Pool) -> None:
     )
 
     async for product in source.fetch_rows():
-        coco.mount(
+        await coco.mount(
             coco.component_subpath("product", product.product_id),
             process_product,
             product,

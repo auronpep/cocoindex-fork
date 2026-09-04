@@ -213,7 +213,7 @@ async def app_main(bucket: str) -> None:
 
         with coco.component_subpath("file"):
             async for key, file in walker.items():
-                coco.mount(
+                await coco.mount(
                     coco.component_subpath(key),
                     process_file,
                     file,
