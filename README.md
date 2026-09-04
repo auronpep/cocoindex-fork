@@ -27,7 +27,7 @@
 [![stars](https://img.shields.io/github/stars/cocoindex-io/cocoindex?style=flat-square&label=stars&color=FB6A76)](https://github.com/cocoindex-io/cocoindex)
 [![downloads](https://img.shields.io/pepy/dt/cocoindex?style=flat-square&label=downloads&color=16A534)](https://pepy.tech/projects/cocoindex)
 [![pypi](https://img.shields.io/pypi/v/cocoindex?style=flat-square&label=pypi&color=E59A63)](https://pypi.org/project/cocoindex/)
-[![python](https://img.shields.io/badge/python-3.10--3.13-3572A5?style=flat-square)](https://www.python.org/)
+[![python](https://img.shields.io/badge/python-3.11--3.14-3572A5?style=flat-square)](https://www.python.org/)
 [![rust](https://img.shields.io/badge/rust-core-db6d28?style=flat-square)](https://www.rust-lang.org/)
 [![license](https://img.shields.io/badge/license-Apache--2.0-5B5BD6?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
 [![discord](https://img.shields.io/discord/1314801574169673738?style=flat-square&logo=discord&logoColor=white&label=discord&color=5865F2)](https://discord.com/invite/zpA9S2DR7s)
