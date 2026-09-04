@@ -488,7 +488,7 @@ async def _print_tree_streaming(
         exists=True, file_okay=True, dir_okay=False, readable=True, resolve_path=True
     ),
     help="Path to a .env file to load environment variables from. "
-    "If not provided, attempts to load '.env' from the current directory.",
+    "If not provided, searches upward from the current directory for a '.env' file.",
     default=None,
     show_default=False,
 )
