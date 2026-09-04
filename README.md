@@ -79,22 +79,52 @@ pip install -U cocoindex
 Declare *what* should be in your target — CocoIndex keeps it in sync forever, recomputing only the Δ.
 
 ```python
+import pathlib
+from collections.abc import AsyncIterator
+from dataclasses import dataclass
+from typing import Annotated
+
+import asyncpg
 import cocoindex as coco
 from cocoindex.connectors import localfs, postgres
+from cocoindex.ops.sentence_transformers import SentenceTransformerEmbedder
 from cocoindex.ops.text import RecursiveSplitter
+from numpy.typing import NDArray
+
+PG = coco.ContextKey[asyncpg.Pool]("pg")
+EMBEDDER = SentenceTransformerEmbedder("sentence-transformers/all-MiniLM-L6-v2")
+SPLITTER = RecursiveSplitter()
+
+@dataclass
+class DocChunk:
+    path: str
+    index: int
+    text: str
+    embedding: Annotated[NDArray, EMBEDDER]   # ← column type inferred from the embedder
+
+@coco.lifespan
+async def lifespan(builder: coco.EnvironmentBuilder) -> AsyncIterator[None]:
+    async with await asyncpg.create_pool("postgresql://localhost/docs") as pool:
+        builder.provide(PG, pool)
+        yield
 
 @coco.fn(memo=True)                          # ← cached by hash(input) + hash(code)
 async def index_file(file, table):
-    for chunk in RecursiveSplitter().split(await file.read_text()):
-        table.declare_row(text=chunk.text, embedding=embed(chunk.text))
+    path = str(file.file_path.path)
+    for i, chunk in enumerate(SPLITTER.split(await file.read_text(), chunk_size=2000)):
+        table.declare_row(
+            row=DocChunk(path, i, chunk.text, await EMBEDDER.embed(chunk.text))
+        )
 
 @coco.fn
 async def main(src):
-    table = await postgres.mount_table_target(PG, table_name="docs")
+    table = await postgres.mount_table_target(
+        PG, "docs", await postgres.TableSchema.from_class(DocChunk, ["path", "index"])
+    )
     table.declare_vector_index(column="embedding")
     await coco.mount_each(index_file, localfs.walk_dir(src).items(), table)
 
-coco.App(coco.AppConfig(name="docs"), main, src="./docs").update_blocking()
+coco.App(coco.AppConfig(name="docs"), main, src=pathlib.Path("./docs")).update_blocking()
 ```
 
 <p align="center">Run once to backfill. Re-run anytime — only the changed files re-embed.</p>
