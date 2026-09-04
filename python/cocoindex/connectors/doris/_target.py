@@ -1088,8 +1088,13 @@ def _apply_table_actions(
                                 config,
                                 f"ALTER TABLE `{config.database}`.`{key.table_name}` DROP COLUMN `{col_name}`",
                             )
-                        except Exception:
-                            pass
+                        except Exception as e:
+                            _logger.warning(
+                                "Failed to drop column %s from table %s: %s",
+                                col_name,
+                                key.table_name,
+                                e,
+                            )
                     elif col_action in ("insert", "upsert") and col_def is not None:
                         nullable = "NULL" if col_def.nullable else "NOT NULL"
                         try:
@@ -1098,8 +1103,13 @@ def _apply_table_actions(
                                 f"ALTER TABLE `{config.database}`.`{key.table_name}` "
                                 f"ADD COLUMN `{col_name}` {col_def.type} {nullable}",
                             )
-                        except Exception:
-                            pass
+                        except Exception as e:
+                            _logger.warning(
+                                "Failed to add column %s to table %s: %s",
+                                col_name,
+                                key.table_name,
+                                e,
+                            )
 
     return outputs
 
