@@ -206,7 +206,7 @@ If you need to access context values outside of CocoIndex processing components 
 
 ```python
 # Sync API
-db = coco.default_env().get_context(PG_DB)
+db = coco.start_blocking().get_context(PG_DB)
 ```
 
 ```python
