@@ -88,9 +88,21 @@ def _parse_app_target(specifier: str) -> AppSpecifier:
         './main.py:app2' -> AppSpecifier('./main.py', 'app2', None)
         './main.py:app2@alpha' -> AppSpecifier('./main.py', 'app2', 'alpha')
         'mymodule:my_app@default' -> AppSpecifier('mymodule', 'my_app', 'default')
+        'C:\\dir\\main.py:app2' -> AppSpecifier('C:\\dir\\main.py', 'app2', None)
     """
-    parts = specifier.split(":", 1)
-    module_ref = parts[0]
+    # A Windows absolute path starts with a drive letter and a colon; that colon
+    # belongs to the path, not to the module/app separator. Require a following
+    # path separator so a one-letter module ref ('a:my_app') still parses.
+    drive = (
+        specifier[:2]
+        if len(specifier) > 2
+        and specifier[0].isalpha()
+        and specifier[1] == ":"
+        and specifier[2] in "\\/"
+        else ""
+    )
+    parts = specifier[len(drive) :].split(":", 1)
+    module_ref = drive + parts[0]
 
     if not module_ref:
         raise click.BadParameter(
