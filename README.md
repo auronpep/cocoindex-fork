@@ -340,3 +340,7 @@ coco.App(coco.AppConfig(name="docs"), main, src=pathlib.Path("./docs")).update_b
 <br/><br/>
 
 <p align="center"><sub>Apache 2.0 · © CocoIndex contributors 🥥</sub></p>
+
+## Maintainers
+
+- auronpep (owner)
