@@ -199,8 +199,8 @@ def declare_file(
 OUTPUT_DIR = coco.ContextKey[pathlib.Path]("output_dir")
 
 @coco.fn
-def app_main() -> None:
-    coco.mount(
+async def app_main() -> None:
+    await coco.mount(
         localfs.declare_file,
         localfs.FilePath("readme.txt", base_dir=OUTPUT_DIR),
         content="Hello, world!",
